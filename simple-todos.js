@@ -50,14 +50,14 @@ if (Meteor.isClient) {
       event.target.text.value = "";
     },
     "change .hide-completed input": function(event){
-      Session.set("hideCompleted", event.target.checked)
+      Session.set("hideCompleted", event.target.checked);
     }
 
   });
 
   Template.task.helpers({
     isOwner: function(){
-      return this.owner === Meteor.userId()
+      return this.owner === Meteor.userId();
     }
   });
 
@@ -76,7 +76,7 @@ if (Meteor.isClient) {
 
   Accounts.ui.config({
     passwordSignupFields: "USERNAME_ONLY"
-  })
+  });
 
 }
 
@@ -84,7 +84,7 @@ Meteor.methods({
   addTask: function(text) {
     // Make sure the user is logged in before inserting a task
     if (! Meteor.userId()) {
-      throw new Meteor.Error("not-authorized");
+      throw new Meteor.Error('not-authorized');
     }
 
     Tasks.insert({
@@ -98,16 +98,17 @@ Meteor.methods({
     var task = Tasks.findOne(taskId);
     if (task.private && task.owner !== Meteor.userId()){
       // If the task is private, make sure only the owner can delete it
-      throw new Meteor.Error("not-authorized");
+      throw new Meteor.Error('not-authorized');
     }
     Tasks.remove(taskId);
   },
   setChecked: function(taskId,setChecked){
     var task = Tasks.findOne(taskId);
-    if (task.private && task.owner !== Meteor.userId()){
+    if (task.private && task.owner !== Meteor.userId()) {
+      // If the task is private, make sure only the owner can check it off
       throw new Meteor.Error("not-authorized");
     }
-    Tasks.update(taskId, { $set: {checked: setChecked}})
+    Tasks.update(taskId, { $set: {checked: setChecked}});
   },
   setPrivate: function(taskId,setToPrivate){
     var task = Tasks.findOne(taskId);
